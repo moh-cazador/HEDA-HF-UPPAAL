@@ -1,0 +1,69 @@
+
+//***************************************************************************************************************
+//=============************       Model Checking Queries for HEDA-HF UPPAAL     ************======================
+//***************************************************************************************************************
+
+// ======================
+// Safety Properties
+// ======================
+
+A[] not deadlock
+// Ensures that the system never reaches a deadlock state.
+
+A[] not (Patient.Stable and Patient.Decompensating)
+// Ensures a patient cannot be both stable and decompensating simultaneously.
+
+A[](Patient.Stable imply not Cloud.Alerting)
+// If the patient is stable, there should be no alerting from the cloud.
+
+A[](Cloud.Alerting imply not Patient.Stable)
+// If the cloud is issuing an alert, the patient should not be stable.
+
+A[](Patient.Decompensating imply (severe_symptoms == true))
+// If the patient is decompensating, it must be due to severe symptoms.
+
+
+// ======================
+// Liveness Properties
+// ======================
+
+A<>(Patient.Decompensating imply alert_sent)
+// If a patient decompensates, an alert will eventually be sent.
+
+A<>(alert_sent imply Physician.Responding)
+// Once an alert is sent, a physician will eventually respond.
+
+A<>(Sensor.DataReady imply AI.Inferencing)
+// Once data is ready from the sensor, AI will eventually start inferencing.
+
+A<>(AI.Inferencing imply AI.Uploading)
+// Once AI starts inferencing, it will eventually upload the results.
+
+A<>(Cloud.Predicting imply Analyse_end)
+// If the cloud starts prediction, it eventually finishes analysis.
+
+
+// ======================
+// Timeliness Properties
+// ======================
+
+A[] (Sensor.Sensing imply Sensor.sense_timer <= PERIOD)
+// Ensures the sensor completes sensing within a defined period.
+
+A[](AI.Inferencing imply AI.inference_timer <= MAX_INFERENCE_TIME)
+// Ensures AI completes inferencing within its maximum allowed time.
+
+A[] (Cloud.Predicting imply Cloud.cloud_timer <= MAX_CLOUD)
+// Cloud predictions should complete within the maximum cloud time.
+
+
+// ======================
+// Robustness Properties
+// ======================
+
+AI.Disconnected --> not Cloud.Predicting
+// If AI disconnects, cloud prediction must not happen afterward.
+
+A[](AI.Disconnected imply not Cloud.Predicting)
+// If AI is disconnected, cloud prediction must not be ongoing.
+
