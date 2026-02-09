@@ -13,7 +13,6 @@ HEDA-HF-UPPAAL/
 │ └── heda_declarations.txt # Global declarations
 
 ├── queries/
-
 │ ├── MC_queries.q # Model checking properties Safety;Liveness,robusteness
 
 │ └── SMC_queries.q # Probabilistic model checking  properties
