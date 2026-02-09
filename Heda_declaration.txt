@@ -1,0 +1,102 @@
+
+//***************************************************************************************************************
+//=============************       Global declarations for HEDA-HF System       ************======================
+//***************************************************************************************************************
+
+
+//============================ Clock variables====================================================================
+
+clock global_time;
+clock alert_timer;     // alert latency
+
+//============================ System Counters and Legacy Cleanup ================================================
+
+const int MAX_RETRIES     = 5;        // cloud/edge failover attempts
+const int MAX_PRED        = 12;       // maximum allowed cloud predictions per period
+int connection_retries    = 0; 
+const int    MAX_RTO      = 60;       // reconnect timeout
+const int    LATENCY      = 20;       // network/upload delay (mean)
+
+
+//============================  System state flags ==============================================================
+
+bool Not_Stable        = false;
+bool severe_symptoms   = false;
+bool ignore_alert      = false;
+bool alert_sent        = false;
+bool Analyse_end       = false;
+
+//******* Risk flag determined by analysis (placeholder)
+bool high_risk         = false;
+bool Connection        = false;
+bool Edge_down         = false;
+ 
+
+//============================  Channels ======================================================================
+
+broadcast  chan Start_Sensing;
+broadcast  chan physio_normal, physio_critical;     // Patient -> Edge
+broadcast  chan upload_complete;
+broadcast  chan data_ready_ok;
+broadcast  chan data_ready_risk;
+broadcast  chan cloud_alert;                         // Cloud -> AlertManager
+broadcast  chan analysis_complete;                   // Cloud optional
+broadcast  chan feedback_ok;                         // Physician -> Cloud
+broadcast  chan Ack;                                 // Physician -> AlertManager
+broadcast  chan Ignore;                              // Physician -> AlertManager
+broadcast  chan physician_responding;
+
+
+
+//============================ Time & Rate Parameters =========================================================
+
+//********* Sensing and Monitoring Windows
+const int PERIOD        = 60;   // sensor reads every 60s for stable/at-risk
+const int CRIT_PERIOD   = 20;   // critical: sensor reads every 20s
+const int NORMAL_PERIOD = 240;  // stable patients may be monitored every 4h in low-risk context
+const double SENSOR_READ_NORMAL      = 1.0/PERIOD;
+const double SENSOR_READ_RISK        = 1.0/PERIOD;
+const double SENSOR_READ_CRITICAL    = 1.0/CRIT_PERIOD;
+
+//*********  Patient Progression
+const double STABLE_TO_RISK_RATE     = 1.0/1440;   // daily risk assessment
+const double RISK_TO_CRITICAL_RATE   = 1.0/180;    // escalate within 3 hours if risk detected
+const double CRITICAL_TO_STABLE_RATE = 1.0/720;    // intervention and recovery typically within 12 hours
+const double RECOVERY_RATE           = 1.0/300;    // mean 5 hours stabilization post intervention
+
+
+
+
+//********* Edge, Cloud, and Alert Processing Rates
+const double SIMPLE_INFERENCE_RATE   = 1.0/3;      // rapid edge processing (3s)
+const double COMPLEX_INFERENCE_RATE  = 1.0/10;     // for complex multi-signals (10s)
+const int    MAX_INFERENCE_TIME      = 30;         // edge deadline
+const double CLOUD_PROCESSING_RATE   = 1.0/18;     // typical cloud analytics (18s)
+const int    MAX_CLOUD               = 45;         // cloud task SLA (45s)
+const int    MAX_ALERT_DELAY         = 120;        // sensible clinical alert deadline (120s)
+const int    MAX_UPDATE              = 180;        // model update time
+const double ACK_PROCESSING_RATE     = 2.0;        // high-speed acknowledgment (500ms)
+
+
+
+//*********  Physician Actions and Feedback
+const double IMMEDIATE_ALERT_RATE    = 1.0/1.0;    // urgent clinical alerts, elite workflow (1s)
+const double URGENT_RESPONSE_RATE    = 1.0/120;    // rapid physician review (~2 min)
+const double ROUTINE_RESPONSE_RATE   = 1.0/1200;   // routine/follow-ups (20 min)
+const int    MAX_RESPONSE_DELAY      = 180;        // response SLA
+const int    MAX_ACK_DELAY           = 120;        // quick acknowledgement (120s)
+
+
+//============================  Probability Parameters (Deterministic for SMC)  ================================= 
+
+const int P_EDGE_LOW_RISK       = 15;         // likelihood risk detection when truly critical
+const int P_EDGE_HIGH_RISK      = 85;         // low false positives in stable state
+const int P_PHYSICIAN_ACCEPT    = 90;         // reflects modern HF alert workflow (high uptake)
+const int P_PHYSICIAN_REJECT    = 10;
+
+
+
+
+
+
+
