@@ -13,6 +13,7 @@ HEDA-HF-UPPAAL/
 │ └── heda_declarations.txt # Global declarations
 
 ├── queries/
+
 │ ├── MC_queries.q # Model checking properties Safety;Liveness,robusteness
 
 │ └── SMC_queries.q # Probabilistic model checking  properties
@@ -37,8 +38,6 @@ HEDA-HF-UPPAAL/
 ├── LICENSE
 
 └── README.md
-
-
 ## 🧪 Usage
 - Open the `models/heda_model.xml` in **UPPAAL SMC**.
 - Use the query files in `queries/` to perform verification:
@@ -47,14 +46,9 @@ HEDA-HF-UPPAAL/
   - Liveness: eventual responses
   - Probabilistic: bounded-time event probabilities
 - Results are reproducible with UPPAAL SMC's statistical settings.
-
 ## 📊 Data and Code Availability
 - All model files and queries are included in this repository.
 - Simulation traces and screenshots are provided under `results/`.
 - The repository is meant for reproducibility and research transparency.
-
   ## ⚠️ Disclaimer
-This repository includes verification models only. No real patient data is shared. The UPPAAL software must be used under its respective license.
-## ⚠️ Disclaimer
-
 This repository includes verification models only. No real patient data is shared. The UPPAAL software must be used under its respective license.
