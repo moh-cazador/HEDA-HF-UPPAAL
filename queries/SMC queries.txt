@@ -1,0 +1,58 @@
+
+//***************************************************************************************************************
+//============= Probabilistic Model Checking Queries for HEDA-HF UPPAAL SMC Verification   ======================
+//***************************************************************************************************************
+
+
+
+
+
+// Query 1: Probability of reaching alerting state within MAX_ALERT_DELAY
+// This evaluates the responsiveness of the cloud alert mechanism.
+Pr[<=MAX_ALERT_DELAY](<> Cloud.Alerting)
+
+// Query 2: Probability of completing AI upload within MAX_INFERENCE_TIME
+// This models data upload reliability of edge AI inference.
+Pr[<=MAX_INFERENCE_TIME](<> AI.Uploading)
+
+// Query 3: Probability of completing prediction within 600 time units
+// Captures the performance guarantee of the cloud prediction module.
+Pr[<=600](<> Cloud.Predicting)
+
+// Query 4: Probability of Sensor having data ready within configured PERIOD
+// This assesses regularity and reliability of sensor sampling.
+Pr[<=PERIOD](<> Sensor.DataReady)
+
+
+
+
+
+
+// ======================
+// SMC Queries
+// ======================
+
+Pr[<=300] (<> AI.Uploading) >= 0.98
+// There is at least 98% probability that AI uploads within 300 time units.
+
+
+Pr[<=30]  (<> Cloud.Alerting)
+// Probability of cloud alerting within 30 time units.
+
+Pr[<=60]  (<> Cloud.Alerting)
+// Probability of cloud alerting within 60 time units.
+
+Pr[<=90]  (<> Cloud.Alerting)
+// Probability of cloud alerting within 90 time units.
+
+Pr[<=120] (<> Cloud.Alerting)
+// Probability of cloud alerting within 120 time units.
+
+Pr[<=600] (<> Cloud.Alerting)
+// Probability of cloud alerting within 600 time units.
+
+Pr[<=MAX_INFERENCE_TIME] (<> AI.Uploading)
+// Probability that AI uploading occurs within the maximum allowed inference time.
+
+Pr[<=10000] (<> Cloud.Failed)
+// Probability of cloud failure within 10,000 time units.
